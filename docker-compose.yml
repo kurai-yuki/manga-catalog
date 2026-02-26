@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8080:8080
+    container_name: app
+    image: viny9/manga-catalog:latest
+    volumes:
+      - .:/app # mount project folder
+      - ~/.m2:/root/.m2 # cache Maven dependencies
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: manga-catalog
+    volumes:
+      - ~/apps/postgres/data:/var/lib/postgresql
