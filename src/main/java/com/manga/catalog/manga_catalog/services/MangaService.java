@@ -80,7 +80,7 @@ public class MangaService {
     public void remove(int id) {
         boolean exists = repository.existsById(id);
 
-        if (exists) {
+        if (!exists) {
             throw new Error("exists");
         }
 
