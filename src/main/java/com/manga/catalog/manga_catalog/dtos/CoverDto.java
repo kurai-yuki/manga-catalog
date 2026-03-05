@@ -1,7 +1,5 @@
 package com.manga.catalog.manga_catalog.dtos;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
