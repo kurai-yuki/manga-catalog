@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class StaffDto {
-    private Integer id;
+public class TagDto {
+    private int id;
 
     private String name;
 
