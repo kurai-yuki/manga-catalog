@@ -1,0 +1,58 @@
+package com.manga.catalog.manga_catalog.entities;
+
+import java.time.LocalDateTime;
+
+import com.manga.catalog.manga_catalog.dtos.CreateTagDto;
+import com.manga.catalog.manga_catalog.dtos.TagDto;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class Tag {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String name;
+
+    private String description;
+
+    @Column(insertable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(insertable = false, updatable = false)
+    private LocalDateTime updatedAt;
+
+    // Create
+    public Tag(CreateTagDto dto) {
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+    }
+
+    // Update
+    public Tag(int id, CreateTagDto dto) {
+        this.id = id;
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+    }
+
+    public static TagDto toDto(Tag tag) {
+        return new TagDto(
+                tag.getId(),
+                tag.getName(),
+                tag.getDescription());
+    }
+}
