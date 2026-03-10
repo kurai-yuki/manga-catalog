@@ -2,38 +2,44 @@ package com.manga.catalog.manga_catalog.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.manga.catalog.manga_catalog.dtos.CreateTagDto;
-import com.manga.catalog.manga_catalog.dtos.TagDto;
+import com.manga.catalog.manga_catalog.dtos.tag.CreateTagDto;
+import com.manga.catalog.manga_catalog.dtos.tag.TagDto;
 import com.manga.catalog.manga_catalog.entities.Tag;
+import com.manga.catalog.manga_catalog.impl.IService;
+import com.manga.catalog.manga_catalog.mappers.TagMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.TagRepository;
 
-@Service
-public class TagService {
-    @Autowired
-    TagRepository repository;
+import lombok.RequiredArgsConstructor;
 
+@Service
+@RequiredArgsConstructor
+public class TagService implements IService<TagDto, CreateTagDto> {
+
+    private final TagRepository repository;
+    private final TagMapperImpl tagMapperImpl;
+
+    @Override
     public List<TagDto> findAll() {
         List<Tag> tags = repository.findAll();
-        List<TagDto> dto = tags.stream()
-                .map((tag) -> Tag.toDto(tag))
-                .toList();
+
+        List<TagDto> dto = tagMapperImpl.toDtoList(tags);
         return dto;
     }
 
+    @Override
     public TagDto findById(int id) {
         Tag tag = repository.findById(id)
                 .orElseThrow(() -> {
                     throw new Error("teste");
                 });
 
-        TagDto TagDto = Tag.toDto(tag);
-
-        return TagDto;
+        TagDto dto = tagMapperImpl.toDto(tag);
+        return dto;
     }
 
+    @Override
     public TagDto add(CreateTagDto payload) {
         Tag exists = repository.findByName(payload.getName());
 
@@ -41,26 +47,30 @@ public class TagService {
             throw new Error("exists");
         }
 
-        Tag tag = new Tag(payload);
+        Tag tag = tagMapperImpl.toEntity(payload);
+
         Tag response = repository.save(tag);
 
-        TagDto dto = Tag.toDto(response);
+        TagDto dto = tagMapperImpl.toDto(response);
         return dto;
     }
 
+    @Override
     public TagDto update(int id, CreateTagDto payload) {
-        boolean exists = repository.existsById(id);
-        if (exists) {
-            throw new Error("exists");
-        }
+        Tag tag = repository.findById(id)
+                .orElseThrow(() -> {
+                    throw new Error("exists");
+                });
 
-        Tag updatedTag = new Tag(id, payload);
-        Tag response = repository.save(updatedTag);
+        tagMapperImpl.update(tag, payload);
 
-        TagDto dto = Tag.toDto(response);
+        Tag response = repository.save(tag);
+
+        TagDto dto = tagMapperImpl.toDto(response);
         return dto;
     }
 
+    @Override
     public void remove(int id) {
         boolean exists = repository.existsById(id);
 

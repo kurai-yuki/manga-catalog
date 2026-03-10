@@ -1,15 +1,19 @@
-package com.manga.catalog.manga_catalog.dtos;
+package com.manga.catalog.manga_catalog.dtos.manga;
 
 import java.time.LocalDateTime;
 
 import com.manga.catalog.manga_catalog.enums.LaunchStatusEnum;
 import com.manga.catalog.manga_catalog.enums.StatusEnum;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateMangaDto {
     private String title;
 
@@ -19,7 +23,7 @@ public class CreateMangaDto {
 
     private LaunchStatusEnum launchStatus;
 
-    private boolean imported;
+    private Boolean imported;
 
     private Integer totalVolumes;
 

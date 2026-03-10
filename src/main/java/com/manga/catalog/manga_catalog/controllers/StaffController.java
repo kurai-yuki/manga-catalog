@@ -1,7 +1,6 @@
 package com.manga.catalog.manga_catalog.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,9 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.manga.catalog.manga_catalog.dtos.CreateStaffDto;
-import com.manga.catalog.manga_catalog.dtos.Pagination;
-import com.manga.catalog.manga_catalog.dtos.StaffDto;
+import com.manga.catalog.manga_catalog.dtos.PaginationRequest;
+import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
+import com.manga.catalog.manga_catalog.dtos.staff.CreateStaffDto;
+import com.manga.catalog.manga_catalog.dtos.staff.StaffDto;
 import com.manga.catalog.manga_catalog.services.StaffService;
 
 @Controller
@@ -26,9 +26,9 @@ public class StaffController {
     StaffService service;
 
     @GetMapping
-    public ResponseEntity<Page<StaffDto>> findAll(@ModelAttribute Pagination pagination) {
-        Page<StaffDto> publishers = service.findAll(pagination);
-        return new ResponseEntity<Page<StaffDto>>(publishers, HttpStatus.OK);
+    public ResponseEntity<PaginationResponse<StaffDto>> findAll(@ModelAttribute PaginationRequest pagination) {
+        PaginationResponse<StaffDto> publishers = service.findAll(pagination);
+        return new ResponseEntity<PaginationResponse<StaffDto>>(publishers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -52,7 +52,8 @@ public class StaffController {
     }
 
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable int id) {
+    public ResponseEntity<Void> remove(@PathVariable int id) {
         service.remove(id);
+        return ResponseEntity.noContent().build();
     }
 }

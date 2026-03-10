@@ -1,7 +1,6 @@
 package com.manga.catalog.manga_catalog.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,9 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.manga.catalog.manga_catalog.dtos.CreatePublisherDto;
-import com.manga.catalog.manga_catalog.dtos.Pagination;
-import com.manga.catalog.manga_catalog.dtos.PublisherDto;
+import com.manga.catalog.manga_catalog.dtos.PaginationRequest;
+import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
+import com.manga.catalog.manga_catalog.dtos.publisher.CreatePublisherDto;
+import com.manga.catalog.manga_catalog.dtos.publisher.PublisherDto;
 import com.manga.catalog.manga_catalog.services.PublisherService;
 
 @Controller
@@ -26,9 +26,9 @@ public class PublisherController {
     PublisherService service;
 
     @GetMapping
-    public ResponseEntity<Page<PublisherDto>> findAll(@ModelAttribute Pagination pagination) {
-        Page<PublisherDto> publishers = service.findAll(pagination);
-        return new ResponseEntity<Page<PublisherDto>>(publishers, HttpStatus.OK);
+    public ResponseEntity<PaginationResponse<PublisherDto>> findAll(@ModelAttribute PaginationRequest pagination) {
+        PaginationResponse<PublisherDto> publishers = service.findAll(pagination);
+        return new ResponseEntity<PaginationResponse<PublisherDto>>(publishers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -52,7 +52,8 @@ public class PublisherController {
     }
 
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable int id) {
+    public ResponseEntity<Void> remove(@PathVariable int id) {
         service.remove(id);
+        return ResponseEntity.noContent().build();
     }
 }

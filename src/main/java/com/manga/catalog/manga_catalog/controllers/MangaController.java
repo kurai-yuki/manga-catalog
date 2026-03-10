@@ -1,7 +1,5 @@
 package com.manga.catalog.manga_catalog.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,22 +12,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.manga.catalog.manga_catalog.dtos.CreateMangaDto;
-import com.manga.catalog.manga_catalog.dtos.MangaCountDto;
-import com.manga.catalog.manga_catalog.dtos.MangaDto;
-import com.manga.catalog.manga_catalog.dtos.Pagination;
+import com.manga.catalog.manga_catalog.dtos.PaginationRequest;
+import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
+import com.manga.catalog.manga_catalog.dtos.manga.CreateMangaDto;
+import com.manga.catalog.manga_catalog.dtos.manga.MangaCountDto;
+import com.manga.catalog.manga_catalog.dtos.manga.MangaDto;
 import com.manga.catalog.manga_catalog.services.MangaService;
 
+import lombok.AllArgsConstructor;
+
 @Controller
+@AllArgsConstructor
 @RequestMapping("/manga")
 public class MangaController {
-    @Autowired
-    MangaService service;
+
+    private final MangaService service;
 
     @GetMapping
-    public ResponseEntity<Page<MangaDto>> findAll(@ModelAttribute Pagination pagination) {
-        Page<MangaDto> mangas = service.findAll(pagination);
-        return new ResponseEntity<Page<MangaDto>>(mangas, HttpStatus.OK);
+    public ResponseEntity<PaginationResponse<MangaDto>> findAll(@ModelAttribute PaginationRequest pagination) {
+        PaginationResponse<MangaDto> mangas = service.findAll(pagination);
+        return new ResponseEntity<PaginationResponse<MangaDto>>(mangas, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -47,7 +49,7 @@ public class MangaController {
     @PostMapping
     public ResponseEntity<MangaDto> add(@RequestBody CreateMangaDto body) {
         MangaDto manga = service.add(body);
-        return new ResponseEntity<MangaDto>(manga, HttpStatus.OK);
+        return new ResponseEntity<MangaDto>(manga, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -59,7 +61,8 @@ public class MangaController {
     }
 
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable int id) {
+    public ResponseEntity<Void> remove(@PathVariable int id) {
         service.remove(id);
+        return ResponseEntity.noContent().build(); 
     }
 }

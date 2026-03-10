@@ -1,0 +1,44 @@
+package com.manga.catalog.manga_catalog.mappers;
+
+import java.util.List;
+
+import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
+
+import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
+import com.manga.catalog.manga_catalog.dtos.staff.CreateStaffDto;
+import com.manga.catalog.manga_catalog.dtos.staff.StaffDto;
+import com.manga.catalog.manga_catalog.entities.Staff;
+
+@Mapper(componentModel = "spring")
+public interface StaffMapper {
+    StaffDto toDto(Staff manga);
+
+    List<StaffDto> toDtoList(List<Staff> mangas);
+
+    Staff toEntity(StaffDto dto);
+
+    Staff toEntity(CreateStaffDto dto);
+
+    /**
+     * Convert Page<T> from spring into the custom Pagination<T> response
+     **/
+    default PaginationResponse<StaffDto> toPagination(Page<Staff> page) {
+        PaginationResponse<StaffDto> response = new PaginationResponse<>();
+        List<StaffDto> dto = toDtoList(page.getContent());
+
+        response.setData(dto);
+        response.setPagination(page.getPageable());
+
+        return response;
+    };
+
+    /**
+     * Staff - Entity that will be update <br>
+     * Dto - Will update some datas from the entity
+     **/
+    default void update(Staff manga, CreateStaffDto dto) {
+        manga.setName(dto.getName() != null ? dto.getName() : manga.getName());
+        manga.setDescription(dto.getDescription() != null ? dto.getDescription() : manga.getDescription());
+    }
+}
