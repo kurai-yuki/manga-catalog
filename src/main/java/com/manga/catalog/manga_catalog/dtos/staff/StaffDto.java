@@ -1,4 +1,4 @@
-package com.manga.catalog.manga_catalog.dtos;
+package com.manga.catalog.manga_catalog.dtos.staff;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -14,7 +14,7 @@ services:
       - db
 
   db:
-    image: postgres
+    image: postgres:16
     restart: always
     ports:
       - 5432:5432
@@ -24,4 +24,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: manga-catalog
     volumes:
-      - ~/apps/postgres/data:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

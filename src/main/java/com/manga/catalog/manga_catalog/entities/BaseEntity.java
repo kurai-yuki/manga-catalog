@@ -3,33 +3,24 @@ package com.manga.catalog.manga_catalog.entities;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-public class Staff {
-
+@MappedSuperclass
+public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    private String name;
-
-    private String description;
+    protected Integer id;
 
     @Column(insertable = false, updatable = false)
-    private LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @Column(insertable = false, updatable = false)
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 }

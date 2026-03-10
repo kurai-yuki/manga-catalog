@@ -1,89 +1,115 @@
 package com.manga.catalog.manga_catalog.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.manga.catalog.manga_catalog.dtos.CreateMangaDto;
-import com.manga.catalog.manga_catalog.dtos.MangaCountDto;
-import com.manga.catalog.manga_catalog.dtos.MangaDto;
-import com.manga.catalog.manga_catalog.dtos.Pagination;
+import com.manga.catalog.manga_catalog.dtos.PaginationRequest;
+import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
+import com.manga.catalog.manga_catalog.dtos.manga.CreateMangaDto;
+import com.manga.catalog.manga_catalog.dtos.manga.MangaCountDto;
+import com.manga.catalog.manga_catalog.dtos.manga.MangaDto;
 import com.manga.catalog.manga_catalog.entities.Manga;
+import com.manga.catalog.manga_catalog.entities.Publisher;
 import com.manga.catalog.manga_catalog.enums.StatusEnum;
+import com.manga.catalog.manga_catalog.impl.IService;
+import com.manga.catalog.manga_catalog.mappers.MangaMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.MangaRepository;
+import com.manga.catalog.manga_catalog.repositories.PublisherRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
-public class MangaService {
+@RequiredArgsConstructor
+public class MangaService implements IService<MangaDto, CreateMangaDto> {
 
-    @Autowired
-    MangaRepository repository;
+    private final MangaRepository mangaRepository;
+    private final PublisherRepository publisherRepository;
+    private final MangaMapperImpl mangaMapperImpl;
 
     public MangaCountDto mangaCount() {
-        int allMangas = (int) repository.count();
-        int allCompletedMangas = repository.countByStatus(StatusEnum.COMPLETE);
-        int allOngoingMangas = repository.countByStatus(StatusEnum.ONGOING);
+        int allMangas = (int) mangaRepository.count();
+        int allCompletedMangas = mangaRepository.countByStatus(StatusEnum.COMPLETE);
+        int allOngoingMangas = mangaRepository.countByStatus(StatusEnum.ONGOING);
 
         return new MangaCountDto(allMangas, allCompletedMangas, allOngoingMangas);
     }
 
-    public Page<MangaDto> findAll(Pagination payload) {
+    @Override
+    public PaginationResponse<MangaDto> findAll(PaginationRequest payload) {
         Sort sort = Sort.by(payload.getOrderDirection(), payload.getOrderBy());
         Pageable pagination = PageRequest.of(payload.getPage(), payload.getPageSize(), sort);
 
-        Page<Manga> mangas = repository.findAll(pagination);
+        Page<Manga> mangas = mangaRepository.findAll(pagination);
 
-        Page<MangaDto> dto = mangas.map((manga) -> Manga.toDto(manga));
+        PaginationResponse<MangaDto> dto = mangaMapperImpl.toPagination(mangas);
         return dto;
     }
 
+    @Override
     public MangaDto findById(int id) {
-        Manga manga = repository.findById(id)
+        Manga manga = mangaRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new Error("teste");
                 });
 
-        MangaDto mangaDto = Manga.toDto(manga);
-
+        MangaDto mangaDto = mangaMapperImpl.toDto(manga);
         return mangaDto;
     }
 
+    @Override
     public MangaDto add(CreateMangaDto payload) {
-        Manga exists = repository.findByTitle(payload.getTitle());
+        Manga exists = mangaRepository.findByTitle(payload.getTitle());
 
         if (exists != null) {
             throw new Error("exists");
         }
 
-        Manga manga = new Manga(payload);
-        Manga response = repository.save(manga);
+        Publisher publisher = publisherRepository.findById(payload.getPublisherId())
+                .orElseThrow(() -> {
+                    throw new Error("exists 2");
+                });
 
-        MangaDto dto = Manga.toDto(response);
-        return dto;
+        Manga manga = mangaMapperImpl.toEntity(payload);
+        manga.setPublisher(publisher);
+
+        Manga response = mangaRepository.save(manga);
+
+        MangaDto mangaDto = mangaMapperImpl.toDto(response);
+        return mangaDto;
     }
 
+    @Override
     public MangaDto update(int id, CreateMangaDto payload) {
-        boolean exists = repository.existsById(id);
-        if (exists) {
-            throw new Error("exists");
-        }
+        Manga manga = mangaRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new Error("exists");
+                });
 
-        Manga updatedManga = new Manga(id, payload);
-        Manga response = repository.save(updatedManga);
+        Publisher publisher = publisherRepository.findById(payload.getPublisherId())
+                .orElseThrow(() -> {
+                    throw new Error("exists");
+                });
 
-        MangaDto dto = Manga.toDto(response);
+        mangaMapperImpl.update(manga, payload);
+        manga.setPublisher(publisher);
+
+        Manga response = mangaRepository.save(manga);
+
+        MangaDto dto = mangaMapperImpl.toDto(response);
         return dto;
     }
 
+    @Override
     public void remove(int id) {
-        boolean exists = repository.existsById(id);
+        boolean exists = mangaRepository.existsById(id);
 
         if (!exists) {
             throw new Error("exists");
         }
 
-        repository.deleteById(id);
+        mangaRepository.deleteById(id);
     }
 }
