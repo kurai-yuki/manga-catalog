@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.manga.catalog.manga_catalog.dtos.CoverDto;
-import com.manga.catalog.manga_catalog.dtos.CreateCoverDto;
+import com.manga.catalog.manga_catalog.dtos.cover.CoverDto;
+import com.manga.catalog.manga_catalog.dtos.cover.CreateCoverDto;
 import com.manga.catalog.manga_catalog.services.CoverService;
 
 @Controller()
@@ -26,16 +26,16 @@ public class CoverController {
     @Autowired
     CoverService service;
 
-    @GetMapping("/manga/{mangaId}")
-    public ResponseEntity<List<CoverDto>> findCoversByMangaId(@PathVariable int mangaId) {
-        List<CoverDto> covers = service.findCoversByMangaId(mangaId);
-        return new ResponseEntity<List<CoverDto>>(covers, HttpStatus.CREATED);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<CoverDto> findById(@PathVariable int id) {
         CoverDto cover = service.findById(id);
         return new ResponseEntity<CoverDto>(cover, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/manga/{mangaId}")
+    public ResponseEntity<List<CoverDto>> findCoversByMangaId(@PathVariable int mangaId) {
+        List<CoverDto> covers = service.findCoversByMangaId(mangaId);
+        return new ResponseEntity<List<CoverDto>>(covers, HttpStatus.CREATED);
     }
 
     @PostMapping
@@ -53,7 +53,8 @@ public class CoverController {
     }
 
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable int id) {
+    public ResponseEntity<Void> remove(@PathVariable int id) {
         service.remove(id);
+        return ResponseEntity.noContent().build();
     }
 }
