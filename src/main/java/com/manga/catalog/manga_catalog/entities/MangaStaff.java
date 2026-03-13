@@ -3,7 +3,7 @@ package com.manga.catalog.manga_catalog.entities;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import com.manga.catalog.manga_catalog.enums.StaffRoleEnum;
+import com.manga.catalog.manga_catalog.enums.RoleEnum;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,7 +25,7 @@ public class MangaStaff extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    private StaffRoleEnum role;
+    private RoleEnum role;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manga_id")

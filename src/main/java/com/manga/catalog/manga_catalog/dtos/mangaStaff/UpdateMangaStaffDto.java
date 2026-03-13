@@ -1,6 +1,6 @@
 package com.manga.catalog.manga_catalog.dtos.mangaStaff;
 
-import com.manga.catalog.manga_catalog.enums.StaffRoleEnum;
+import com.manga.catalog.manga_catalog.enums.RoleEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,5 +12,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateMangaStaffDto {
-    private StaffRoleEnum role;
+    private RoleEnum role;
 }

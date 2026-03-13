@@ -1,6 +1,6 @@
 package com.manga.catalog.manga_catalog.enums;
 
-public enum StaffRoleEnum {
+public enum RoleEnum {
     AUTHOR,
     ARTIST,
 }

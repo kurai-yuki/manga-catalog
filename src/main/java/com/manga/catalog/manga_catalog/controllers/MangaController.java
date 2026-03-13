@@ -19,10 +19,10 @@ import com.manga.catalog.manga_catalog.dtos.manga.MangaCountDto;
 import com.manga.catalog.manga_catalog.dtos.manga.MangaDto;
 import com.manga.catalog.manga_catalog.services.MangaService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/manga")
 public class MangaController {
 

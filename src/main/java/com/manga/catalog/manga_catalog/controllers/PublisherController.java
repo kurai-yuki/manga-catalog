@@ -1,6 +1,5 @@
 package com.manga.catalog.manga_catalog.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,11 +18,14 @@ import com.manga.catalog.manga_catalog.dtos.publisher.CreatePublisherDto;
 import com.manga.catalog.manga_catalog.dtos.publisher.PublisherDto;
 import com.manga.catalog.manga_catalog.services.PublisherService;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/publisher")
 public class PublisherController {
-    @Autowired
-    PublisherService service;
+
+    private final PublisherService service;
 
     @GetMapping
     public ResponseEntity<PaginationResponse<PublisherDto>> findAll(@ModelAttribute PaginationRequest pagination) {
