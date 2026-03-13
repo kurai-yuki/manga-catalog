@@ -2,7 +2,6 @@ package com.manga.catalog.manga_catalog.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,12 +18,14 @@ import com.manga.catalog.manga_catalog.dtos.cover.CoverDto;
 import com.manga.catalog.manga_catalog.dtos.cover.CreateCoverDto;
 import com.manga.catalog.manga_catalog.services.CoverService;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller()
+@RequiredArgsConstructor
 @RequestMapping("/cover")
 public class CoverController {
 
-    @Autowired
-    CoverService service;
+    private final CoverService service;
 
     @GetMapping("/{id}")
     public ResponseEntity<CoverDto> findById(@PathVariable int id) {

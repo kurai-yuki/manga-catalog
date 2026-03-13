@@ -9,7 +9,7 @@ import com.manga.catalog.manga_catalog.dtos.mangaStaff.MangaStaffDto;
 import com.manga.catalog.manga_catalog.entities.Manga;
 import com.manga.catalog.manga_catalog.entities.MangaStaff;
 import com.manga.catalog.manga_catalog.entities.Staff;
-import com.manga.catalog.manga_catalog.enums.StaffRoleEnum;
+import com.manga.catalog.manga_catalog.enums.RoleEnum;
 import com.manga.catalog.manga_catalog.mappers.MangaStaffMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.MangaRepository;
 import com.manga.catalog.manga_catalog.repositories.MangaStaffRepository;
@@ -26,24 +26,23 @@ public class MangaStaffService {
     private final StaffRepository staffRepository;
     private final MangaStaffMapperImpl mangaStaffMapperImpl;
 
-    public List<MangaStaffDto> findAllMangaStaffById(int mangaId) {
+    public List<MangaStaffDto> findAllMangaStaff(int mangaId) {
         List<MangaStaff> staffMembers = mangaStaffRepository.findAllByMangaId(mangaId);
 
         List<MangaStaffDto> dto = mangaStaffMapperImpl.toDto(staffMembers);
         return dto;
     }
 
-    public MangaStaffDto findById(int mangaStaffId) {
+    public MangaStaffDto findMangaStaffById(int mangaStaffId) {
         MangaStaff staffMember = mangaStaffRepository.findById(mangaStaffId)
                 .orElseThrow(() -> {
                     throw new Error("exists1");
                 });
 
-        MangaStaffDto dto = mangaStaffMapperImpl.toDto(staffMember);
-        return dto;
+        return mangaStaffMapperImpl.toDto(staffMember);
     }
 
-    public MangaStaffDto add(CreateMangaStaffDto payload) {
+    public MangaStaffDto addStaffOnManga(CreateMangaStaffDto payload) {
         Manga manga = mangaRepository.findById(payload.getMangaId())
                 .orElseThrow(() -> {
                     throw new Error("exists1");
@@ -59,11 +58,10 @@ public class MangaStaffService {
         staffMember.setStaff(staff);
 
         MangaStaff response = mangaStaffRepository.save(staffMember);
-        MangaStaffDto dto = mangaStaffMapperImpl.toDto(response);
-        return dto;
+        return mangaStaffMapperImpl.toDto(response);
     }
 
-    public void updateStaffRole(int id, StaffRoleEnum role) {
+    public void updateStaffRole(int id, RoleEnum role) {
         MangaStaff mangaStaff = mangaStaffRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new Error("exists");
@@ -73,7 +71,7 @@ public class MangaStaffService {
         mangaStaffRepository.save(mangaStaff);
     }
 
-    public void remove(int id) {
+    public void removeMangaStaff(int id) {
         boolean exists = mangaStaffRepository.existsById(id);
 
         if (!exists) {

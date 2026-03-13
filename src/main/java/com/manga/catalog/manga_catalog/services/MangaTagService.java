@@ -31,8 +31,7 @@ public class MangaTagService {
     public List<MangaTagDto> findMangaTags(int mangaId) {
         List<MangaTag> mangaTags = mangaTagRepository.findAllByMangaId(mangaId);
 
-        List<MangaTagDto> dto = mangaTagMapperImpl.toDto(mangaTags);
-        return dto;
+        return mangaTagMapperImpl.toDto(mangaTags);
     }
 
     public MangaTagDto findById(int mangaTagId) {
@@ -41,8 +40,7 @@ public class MangaTagService {
                     throw new Error("exists1");
                 });
 
-        MangaTagDto dto = mangaTagMapperImpl.toDto(tag);
-        return dto;
+        return mangaTagMapperImpl.toDto(tag);
     }
 
     public List<MangaTagDto> addMangaTags(CreateMangaTagDto payload) {
@@ -65,8 +63,7 @@ public class MangaTagService {
                 .toList();
 
         List<MangaTag> response = mangaTagRepository.saveAll(mangaTags);
-        List<MangaTagDto> dto = mangaTagMapperImpl.toDto(response);
-        return dto;
+        return mangaTagMapperImpl.toDto(response);
     }
 
     public void remove(int id) {
