@@ -14,7 +14,7 @@ import com.manga.catalog.manga_catalog.entities.Tag;
 public interface TagMapper {
     TagDto toDto(Tag manga);
 
-    List<TagDto> toDtoList(List<Tag> mangas);
+    List<TagDto> toDto(List<Tag> mangas);
 
     Tag toEntity(TagDto dto);
 
@@ -25,7 +25,7 @@ public interface TagMapper {
      **/
     default PaginationResponse<TagDto> toPagination(Page<Tag> page) {
         PaginationResponse<TagDto> response = new PaginationResponse<>();
-        List<TagDto> dto = toDtoList(page.getContent());
+        List<TagDto> dto = toDto(page.getContent());
 
         response.setData(dto);
         response.setPagination(page.getPageable());

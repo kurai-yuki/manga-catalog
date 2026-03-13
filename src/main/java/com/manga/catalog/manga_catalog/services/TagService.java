@@ -24,7 +24,7 @@ public class TagService implements IService<TagDto, CreateTagDto> {
     public List<TagDto> findAll() {
         List<Tag> tags = repository.findAll();
 
-        List<TagDto> dto = tagMapperImpl.toDtoList(tags);
+        List<TagDto> dto = tagMapperImpl.toDto(tags);
         return dto;
     }
 

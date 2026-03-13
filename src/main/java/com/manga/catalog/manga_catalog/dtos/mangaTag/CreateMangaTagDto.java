@@ -1,6 +1,6 @@
-package com.manga.catalog.manga_catalog.entities;
+package com.manga.catalog.manga_catalog.dtos.mangaTag;
 
-import jakarta.persistence.Entity;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,14 +9,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cover extends BaseEntity {
+public class CreateMangaTagDto {
     private Integer mangaId;
 
-    private String url;
-
-    private int volumeNumber;
-
+    private List<Integer> tagIds;
 }
