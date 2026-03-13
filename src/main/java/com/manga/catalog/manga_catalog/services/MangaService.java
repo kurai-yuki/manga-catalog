@@ -14,7 +14,6 @@ import com.manga.catalog.manga_catalog.dtos.manga.MangaDto;
 import com.manga.catalog.manga_catalog.entities.Manga;
 import com.manga.catalog.manga_catalog.entities.Publisher;
 import com.manga.catalog.manga_catalog.enums.StatusEnum;
-import com.manga.catalog.manga_catalog.impl.IService;
 import com.manga.catalog.manga_catalog.mappers.MangaMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.MangaRepository;
 import com.manga.catalog.manga_catalog.repositories.PublisherRepository;
@@ -23,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MangaService implements IService<MangaDto, CreateMangaDto> {
+public class MangaService {
 
     private final MangaRepository mangaRepository;
     private final PublisherRepository publisherRepository;
@@ -37,18 +36,15 @@ public class MangaService implements IService<MangaDto, CreateMangaDto> {
         return new MangaCountDto(allMangas, allCompletedMangas, allOngoingMangas);
     }
 
-    @Override
     public PaginationResponse<MangaDto> findAll(PaginationRequest payload) {
         Sort sort = Sort.by(payload.getOrderDirection(), payload.getOrderBy());
         Pageable pagination = PageRequest.of(payload.getPage(), payload.getPageSize(), sort);
 
         Page<Manga> mangas = mangaRepository.findAll(pagination);
 
-        PaginationResponse<MangaDto> dto = mangaMapperImpl.toPagination(mangas);
-        return dto;
+        return mangaMapperImpl.toPagination(mangas);
     }
 
-    @Override
     public MangaDto findById(int id) {
         Manga manga = mangaRepository.findById(id)
                 .orElseThrow(() -> {
@@ -59,7 +55,6 @@ public class MangaService implements IService<MangaDto, CreateMangaDto> {
         return mangaDto;
     }
 
-    @Override
     public MangaDto add(CreateMangaDto payload) {
         Manga exists = mangaRepository.findByTitle(payload.getTitle());
 
@@ -77,11 +72,9 @@ public class MangaService implements IService<MangaDto, CreateMangaDto> {
 
         Manga response = mangaRepository.save(manga);
 
-        MangaDto mangaDto = mangaMapperImpl.toDto(response);
-        return mangaDto;
+        return mangaMapperImpl.toDto(response);
     }
 
-    @Override
     public MangaDto update(int id, CreateMangaDto payload) {
         Manga manga = mangaRepository.findById(id)
                 .orElseThrow(() -> {
@@ -98,11 +91,9 @@ public class MangaService implements IService<MangaDto, CreateMangaDto> {
 
         Manga response = mangaRepository.save(manga);
 
-        MangaDto dto = mangaMapperImpl.toDto(response);
-        return dto;
+        return mangaMapperImpl.toDto(response);
     }
 
-    @Override
     public void remove(int id) {
         boolean exists = mangaRepository.existsById(id);
 

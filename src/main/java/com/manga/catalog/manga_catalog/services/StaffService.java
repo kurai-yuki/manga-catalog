@@ -11,7 +11,6 @@ import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
 import com.manga.catalog.manga_catalog.dtos.staff.CreateStaffDto;
 import com.manga.catalog.manga_catalog.dtos.staff.StaffDto;
 import com.manga.catalog.manga_catalog.entities.Staff;
-import com.manga.catalog.manga_catalog.impl.IService;
 import com.manga.catalog.manga_catalog.mappers.StaffMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.StaffRepository;
 
@@ -19,35 +18,30 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class StaffService implements IService<StaffDto, CreateStaffDto> {
+public class StaffService {
 
     private final StaffRepository repository;
     private final StaffMapperImpl staffMapperImpl;
 
-    @Override
     public PaginationResponse<StaffDto> findAll(PaginationRequest payload) {
         Sort sort = Sort.by(payload.getOrderDirection(), payload.getOrderBy());
         Pageable pagination = PageRequest.of(payload.getPage(), payload.getPageSize(), sort);
 
         Page<Staff> staffMembers = repository.findAll(pagination);
 
-        PaginationResponse<StaffDto> dto = staffMapperImpl.toPagination(staffMembers);
-        return dto;
+        return staffMapperImpl.toPagination(staffMembers);
 
     }
 
-    @Override
     public StaffDto findById(int id) {
         Staff staffMember = repository.findById(id)
                 .orElseThrow(() -> {
                     throw new Error("teste");
                 });
 
-        StaffDto dto = staffMapperImpl.toDto(staffMember);
-        return dto;
+        return staffMapperImpl.toDto(staffMember);
     }
 
-    @Override
     public StaffDto add(CreateStaffDto payload) {
         Staff exists = repository.findByName(payload.getName());
 
@@ -59,11 +53,9 @@ public class StaffService implements IService<StaffDto, CreateStaffDto> {
 
         Staff response = repository.save(staffMember);
 
-        StaffDto dto = staffMapperImpl.toDto(response);
-        return dto;
+        return staffMapperImpl.toDto(response);
     }
 
-    @Override
     public StaffDto update(int id, CreateStaffDto payload) {
         Staff staff = repository.findById(id)
                 .orElseThrow(() -> {
@@ -74,11 +66,9 @@ public class StaffService implements IService<StaffDto, CreateStaffDto> {
 
         Staff response = repository.save(staff);
 
-        StaffDto dto = staffMapperImpl.toDto(response);
-        return dto;
+        return staffMapperImpl.toDto(response);
     }
 
-    @Override
     public void remove(int id) {
         boolean exists = repository.existsById(id);
 
