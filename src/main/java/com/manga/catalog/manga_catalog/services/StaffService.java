@@ -6,13 +6,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.manga.catalog.manga_catalog.dtos.PaginationRequest;
-import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
 import com.manga.catalog.manga_catalog.dtos.staff.CreateStaffDto;
 import com.manga.catalog.manga_catalog.dtos.staff.StaffDto;
 import com.manga.catalog.manga_catalog.entities.Staff;
-import com.manga.catalog.manga_catalog.mappers.StaffMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.StaffRepository;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationRequest;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
+import com.manga.catalog.manga_catalog.shared.exceptions.ErrorMessages;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.AlredyExistsException;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.NotFoundException;
+import com.manga.catalog.manga_catalog.shared.mappers.StaffMapperImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +39,7 @@ public class StaffService {
     public StaffDto findById(int id) {
         Staff staffMember = repository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("teste");
+                    throw new NotFoundException(ErrorMessages.notFoundStaff(id));
                 });
 
         return staffMapperImpl.toDto(staffMember);
@@ -46,7 +49,7 @@ public class StaffService {
         Staff exists = repository.findByName(payload.getName());
 
         if (exists != null) {
-            throw new Error("exists");
+            throw new AlredyExistsException(ErrorMessages.staffAlredyExists());
         }
 
         Staff staffMember = staffMapperImpl.toEntity(payload);
@@ -59,7 +62,7 @@ public class StaffService {
     public StaffDto update(int id, CreateStaffDto payload) {
         Staff staff = repository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("exists");
+                    throw new NotFoundException(ErrorMessages.notFoundStaff(id));
                 });
 
         staffMapperImpl.update(staff, payload);
@@ -73,7 +76,7 @@ public class StaffService {
         boolean exists = repository.existsById(id);
 
         if (!exists) {
-            throw new Error("exists");
+            throw new NotFoundException(ErrorMessages.notFoundStaff(id));
         }
 
         repository.deleteById(id);

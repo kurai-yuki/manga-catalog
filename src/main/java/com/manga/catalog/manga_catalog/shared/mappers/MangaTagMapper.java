@@ -1,4 +1,4 @@
-package com.manga.catalog.manga_catalog.mappers;
+package com.manga.catalog.manga_catalog.shared.mappers;
 
 import java.util.List;
 

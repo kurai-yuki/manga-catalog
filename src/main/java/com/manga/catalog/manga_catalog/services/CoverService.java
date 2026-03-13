@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import com.manga.catalog.manga_catalog.dtos.cover.CoverDto;
 import com.manga.catalog.manga_catalog.dtos.cover.CreateCoverDto;
 import com.manga.catalog.manga_catalog.entities.Cover;
-import com.manga.catalog.manga_catalog.mappers.CoverMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.CoverRepository;
+import com.manga.catalog.manga_catalog.shared.exceptions.ErrorMessages;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.AlredyExistsException;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.NotFoundException;
+import com.manga.catalog.manga_catalog.shared.mappers.CoverMapperImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +30,7 @@ public class CoverService {
     public CoverDto findById(int id) {
         Cover cover = repository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("exits");
+                    throw new NotFoundException(ErrorMessages.notFoundCover(id));
                 });
 
         return coverMapperImpl.toDto(cover);
@@ -39,7 +42,7 @@ public class CoverService {
                 payload.getVolumeNumber());
 
         if (exists) {
-            throw new Error("exists");
+            throw new AlredyExistsException(ErrorMessages.coverAlredyExists());
         }
 
         Cover cover = coverMapperImpl.toEntity(payload);
@@ -51,7 +54,7 @@ public class CoverService {
     public CoverDto update(int id, CreateCoverDto payload) {
         Cover cover = repository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("exists");
+                    throw new NotFoundException(ErrorMessages.notFoundCover(id));
                 });
 
         coverMapperImpl.update(cover, payload);
@@ -65,7 +68,7 @@ public class CoverService {
         boolean exists = repository.existsById(id);
 
         if (!exists) {
-            throw new Error("exists");
+            throw new NotFoundException(ErrorMessages.notFoundCover(id));
         }
 
         repository.deleteById(id);

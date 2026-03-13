@@ -6,8 +6,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import com.manga.catalog.manga_catalog.dtos.publisher.PublisherDto;
-import com.manga.catalog.manga_catalog.enums.LaunchStatusEnum;
-import com.manga.catalog.manga_catalog.enums.StatusEnum;
+import com.manga.catalog.manga_catalog.shared.enums.LaunchStatusEnum;
+import com.manga.catalog.manga_catalog.shared.enums.StatusEnum;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
