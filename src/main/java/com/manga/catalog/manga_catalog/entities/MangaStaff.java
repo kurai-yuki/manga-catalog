@@ -3,7 +3,7 @@ package com.manga.catalog.manga_catalog.entities;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import com.manga.catalog.manga_catalog.enums.RoleEnum;
+import com.manga.catalog.manga_catalog.shared.enums.RoleEnum;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

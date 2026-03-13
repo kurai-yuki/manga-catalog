@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.manga.catalog.manga_catalog.entities.Manga;
-import com.manga.catalog.manga_catalog.enums.StatusEnum;
+import com.manga.catalog.manga_catalog.shared.enums.StatusEnum;
 
 public interface MangaRepository extends JpaRepository<Manga, Integer> {
     Manga findByTitle(String title);

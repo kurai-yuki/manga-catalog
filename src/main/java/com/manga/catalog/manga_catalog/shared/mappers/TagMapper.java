@@ -1,14 +1,14 @@
-package com.manga.catalog.manga_catalog.mappers;
+package com.manga.catalog.manga_catalog.shared.mappers;
 
 import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
-import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
 import com.manga.catalog.manga_catalog.dtos.tag.CreateTagDto;
 import com.manga.catalog.manga_catalog.dtos.tag.TagDto;
 import com.manga.catalog.manga_catalog.entities.Tag;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 
 @Mapper(componentModel = "spring")
 public interface TagMapper {

@@ -6,17 +6,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.manga.catalog.manga_catalog.dtos.PaginationRequest;
-import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
 import com.manga.catalog.manga_catalog.dtos.manga.CreateMangaDto;
 import com.manga.catalog.manga_catalog.dtos.manga.MangaCountDto;
 import com.manga.catalog.manga_catalog.dtos.manga.MangaDto;
 import com.manga.catalog.manga_catalog.entities.Manga;
 import com.manga.catalog.manga_catalog.entities.Publisher;
-import com.manga.catalog.manga_catalog.enums.StatusEnum;
-import com.manga.catalog.manga_catalog.mappers.MangaMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.MangaRepository;
 import com.manga.catalog.manga_catalog.repositories.PublisherRepository;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationRequest;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
+import com.manga.catalog.manga_catalog.shared.enums.StatusEnum;
+import com.manga.catalog.manga_catalog.shared.exceptions.ErrorMessages;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.AlredyExistsException;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.NotFoundException;
+import com.manga.catalog.manga_catalog.shared.mappers.MangaMapperImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,7 +51,7 @@ public class MangaService {
     public MangaDto findById(int id) {
         Manga manga = mangaRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("teste");
+                    throw new NotFoundException(ErrorMessages.notFoundManga(id));
                 });
 
         MangaDto mangaDto = mangaMapperImpl.toDto(manga);
@@ -59,12 +62,12 @@ public class MangaService {
         Manga exists = mangaRepository.findByTitle(payload.getTitle());
 
         if (exists != null) {
-            throw new Error("exists");
+            throw new AlredyExistsException(ErrorMessages.mangaAlredyExists());
         }
 
         Publisher publisher = publisherRepository.findById(payload.getPublisherId())
                 .orElseThrow(() -> {
-                    throw new Error("exists 2");
+                    throw new NotFoundException(ErrorMessages.notFoundPublisher(payload.getPublisherId()));
                 });
 
         Manga manga = mangaMapperImpl.toEntity(payload);
@@ -78,12 +81,12 @@ public class MangaService {
     public MangaDto update(int id, CreateMangaDto payload) {
         Manga manga = mangaRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("exists");
+                    throw new NotFoundException(ErrorMessages.notFoundManga(id));
                 });
 
         Publisher publisher = publisherRepository.findById(payload.getPublisherId())
                 .orElseThrow(() -> {
-                    throw new Error("exists");
+                    throw new NotFoundException(ErrorMessages.notFoundPublisher(payload.getPublisherId()));
                 });
 
         mangaMapperImpl.update(manga, payload);
@@ -98,7 +101,7 @@ public class MangaService {
         boolean exists = mangaRepository.existsById(id);
 
         if (!exists) {
-            throw new Error("exists");
+            throw new NotFoundException(ErrorMessages.notFoundManga(id));
         }
 
         mangaRepository.deleteById(id);

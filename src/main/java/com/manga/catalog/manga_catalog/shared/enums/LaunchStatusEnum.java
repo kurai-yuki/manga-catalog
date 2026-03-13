@@ -1,4 +1,4 @@
-package com.manga.catalog.manga_catalog.enums;
+package com.manga.catalog.manga_catalog.shared.enums;
 
 
 public enum LaunchStatusEnum {

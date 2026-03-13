@@ -9,11 +9,14 @@ import com.manga.catalog.manga_catalog.dtos.mangaStaff.MangaStaffDto;
 import com.manga.catalog.manga_catalog.entities.Manga;
 import com.manga.catalog.manga_catalog.entities.MangaStaff;
 import com.manga.catalog.manga_catalog.entities.Staff;
-import com.manga.catalog.manga_catalog.enums.RoleEnum;
-import com.manga.catalog.manga_catalog.mappers.MangaStaffMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.MangaRepository;
 import com.manga.catalog.manga_catalog.repositories.MangaStaffRepository;
 import com.manga.catalog.manga_catalog.repositories.StaffRepository;
+import com.manga.catalog.manga_catalog.shared.enums.RoleEnum;
+import com.manga.catalog.manga_catalog.shared.exceptions.ErrorMessages;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.AlredyExistsException;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.NotFoundException;
+import com.manga.catalog.manga_catalog.shared.mappers.MangaStaffMapperImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,24 +36,31 @@ public class MangaStaffService {
         return dto;
     }
 
-    public MangaStaffDto findMangaStaffById(int mangaStaffId) {
-        MangaStaff staffMember = mangaStaffRepository.findById(mangaStaffId)
+    public MangaStaffDto findMangaStaffById(int id) {
+        MangaStaff staffMember = mangaStaffRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("exists1");
+                    throw new NotFoundException(ErrorMessages.notFoundMangaStaff(id));
                 });
 
         return mangaStaffMapperImpl.toDto(staffMember);
     }
 
     public MangaStaffDto addStaffOnManga(CreateMangaStaffDto payload) {
+        boolean exists = mangaStaffRepository.existsByStaffIdAndMangaIdAndRole(payload.getStaffId(),
+                payload.getMangaId(), payload.getRole());
+
+        if (exists) {
+            throw new AlredyExistsException(ErrorMessages.mangaStaffAlredyExists());
+        }
+
         Manga manga = mangaRepository.findById(payload.getMangaId())
                 .orElseThrow(() -> {
-                    throw new Error("exists1");
+                    throw new NotFoundException(ErrorMessages.notFoundManga(payload.getMangaId()));
                 });
 
         Staff staff = staffRepository.findById(payload.getStaffId())
                 .orElseThrow(() -> {
-                    throw new Error("exists2");
+                    throw new NotFoundException(ErrorMessages.notFoundStaff(payload.getStaffId()));
                 });
 
         MangaStaff staffMember = mangaStaffMapperImpl.toEntity(payload);
@@ -64,7 +74,7 @@ public class MangaStaffService {
     public void updateStaffRole(int id, RoleEnum role) {
         MangaStaff mangaStaff = mangaStaffRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("exists");
+                    throw new NotFoundException(ErrorMessages.notFoundMangaStaff(id));
                 });
         mangaStaff.setRole(role);
 
@@ -75,13 +85,9 @@ public class MangaStaffService {
         boolean exists = mangaStaffRepository.existsById(id);
 
         if (!exists) {
-            throw new Error("exists");
+            throw new NotFoundException(ErrorMessages.notFoundMangaStaff(id));
         }
 
-        try {
-            mangaStaffRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new Error("Delete failed");
-        }
+        mangaStaffRepository.deleteById(id);
     }
 }

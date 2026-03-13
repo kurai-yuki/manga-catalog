@@ -1,14 +1,14 @@
-package com.manga.catalog.manga_catalog.mappers;
+package com.manga.catalog.manga_catalog.shared.mappers;
 
 import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
-import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
 import com.manga.catalog.manga_catalog.dtos.staff.CreateStaffDto;
 import com.manga.catalog.manga_catalog.dtos.staff.StaffDto;
 import com.manga.catalog.manga_catalog.entities.Staff;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 
 @Mapper(componentModel = "spring")
 public interface StaffMapper {

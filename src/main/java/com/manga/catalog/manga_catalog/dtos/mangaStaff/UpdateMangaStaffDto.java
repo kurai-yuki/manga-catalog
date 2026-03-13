@@ -1,6 +1,6 @@
 package com.manga.catalog.manga_catalog.dtos.mangaStaff;
 
-import com.manga.catalog.manga_catalog.enums.RoleEnum;
+import com.manga.catalog.manga_catalog.shared.enums.RoleEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

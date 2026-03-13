@@ -1,4 +1,4 @@
-package com.manga.catalog.manga_catalog.dtos;
+package com.manga.catalog.manga_catalog.shared.dtos;
 
 import org.springframework.data.domain.Sort.Direction;
 
