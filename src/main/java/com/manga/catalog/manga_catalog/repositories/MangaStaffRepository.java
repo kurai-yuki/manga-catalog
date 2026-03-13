@@ -1,10 +1,11 @@
 package com.manga.catalog.manga_catalog.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.manga.catalog.manga_catalog.entities.MangaStaff;
-import java.util.List;
-import com.manga.catalog.manga_catalog.enums.RoleEnum;
+import com.manga.catalog.manga_catalog.shared.enums.RoleEnum;
 
 public interface MangaStaffRepository extends JpaRepository<MangaStaff, Integer> {
     public List<MangaStaff> findAllByMangaId(int mangaId);

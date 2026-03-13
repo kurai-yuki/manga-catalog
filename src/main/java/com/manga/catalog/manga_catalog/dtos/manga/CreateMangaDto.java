@@ -2,8 +2,8 @@ package com.manga.catalog.manga_catalog.dtos.manga;
 
 import java.time.LocalDateTime;
 
-import com.manga.catalog.manga_catalog.enums.LaunchStatusEnum;
-import com.manga.catalog.manga_catalog.enums.StatusEnum;
+import com.manga.catalog.manga_catalog.shared.enums.LaunchStatusEnum;
+import com.manga.catalog.manga_catalog.shared.enums.StatusEnum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

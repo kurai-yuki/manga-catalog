@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.manga.catalog.manga_catalog.dtos.PaginationRequest;
-import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
 import com.manga.catalog.manga_catalog.dtos.publisher.CreatePublisherDto;
 import com.manga.catalog.manga_catalog.dtos.publisher.PublisherDto;
 import com.manga.catalog.manga_catalog.services.PublisherService;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationRequest;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 
 import lombok.RequiredArgsConstructor;
 

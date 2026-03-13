@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.manga.catalog.manga_catalog.dtos.PaginationRequest;
-import com.manga.catalog.manga_catalog.dtos.PaginationResponse;
 import com.manga.catalog.manga_catalog.dtos.mangaStaff.CreateMangaStaffDto;
 import com.manga.catalog.manga_catalog.dtos.mangaStaff.MangaStaffDto;
 import com.manga.catalog.manga_catalog.dtos.mangaStaff.UpdateMangaStaffDto;
@@ -24,6 +22,8 @@ import com.manga.catalog.manga_catalog.dtos.staff.CreateStaffDto;
 import com.manga.catalog.manga_catalog.dtos.staff.StaffDto;
 import com.manga.catalog.manga_catalog.services.MangaStaffService;
 import com.manga.catalog.manga_catalog.services.StaffService;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationRequest;
+import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 
 import lombok.RequiredArgsConstructor;
 

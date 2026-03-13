@@ -12,10 +12,13 @@ import com.manga.catalog.manga_catalog.dtos.mangaTag.MangaTagDto;
 import com.manga.catalog.manga_catalog.entities.Manga;
 import com.manga.catalog.manga_catalog.entities.MangaTag;
 import com.manga.catalog.manga_catalog.entities.Tag;
-import com.manga.catalog.manga_catalog.mappers.MangaTagMapperImpl;
 import com.manga.catalog.manga_catalog.repositories.MangaRepository;
 import com.manga.catalog.manga_catalog.repositories.MangaTagRepository;
 import com.manga.catalog.manga_catalog.repositories.TagRepository;
+import com.manga.catalog.manga_catalog.shared.exceptions.ErrorMessages;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.AlredyExistsException;
+import com.manga.catalog.manga_catalog.shared.exceptions.customExceptions.NotFoundException;
+import com.manga.catalog.manga_catalog.shared.mappers.MangaTagMapperImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,10 +37,10 @@ public class MangaTagService {
         return mangaTagMapperImpl.toDto(mangaTags);
     }
 
-    public MangaTagDto findById(int mangaTagId) {
-        MangaTag tag = mangaTagRepository.findById(mangaTagId)
+    public MangaTagDto findById(int id) {
+        MangaTag tag = mangaTagRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new Error("exists1");
+                    throw new NotFoundException(ErrorMessages.notFoundMangaTag(id));
                 });
 
         return mangaTagMapperImpl.toDto(tag);
@@ -46,12 +49,12 @@ public class MangaTagService {
     public List<MangaTagDto> addMangaTags(CreateMangaTagDto payload) {
         List<MangaTag> exists = mangaTagRepository.findByMangaIdAndTagIds(payload.getMangaId(), payload.getTagIds());
         if (!exists.isEmpty()) {
-            throw new Error("exists alredy");
+            throw new AlredyExistsException(ErrorMessages.mangaTagAlredyExists());
         }
 
         Manga manga = mangaRepository.findById(payload.getMangaId())
                 .orElseThrow(() -> {
-                    throw new Error("not exists1");
+                    throw new NotFoundException(ErrorMessages.notFoundManga(payload.getMangaId()));
                 });
 
         List<Tag> tags = tagRepository.findAllById(payload.getTagIds());
@@ -70,19 +73,15 @@ public class MangaTagService {
         boolean exists = mangaTagRepository.existsById(id);
 
         if (!exists) {
-            throw new Error("exists");
+            throw new NotFoundException(ErrorMessages.notFoundMangaTag(id));
         }
 
-        try {
-            mangaTagRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new Error("Delete failed");
-        }
+        mangaTagRepository.deleteById(id);
     }
 
     private void checkIfAllTagsExists(List<Tag> tags, List<Integer> allTagIds) {
         if (tags.isEmpty()) {
-            throw new Error("not exists");
+            throw new NotFoundException(ErrorMessages.notFoundAnyMangaTag());
         }
 
         if (tags.size() < allTagIds.size()) {
@@ -102,7 +101,7 @@ public class MangaTagService {
             }
 
             if (!failedIds.isEmpty()) {
-                throw new Error("couldnt find some tags");
+                throw new NotFoundException(ErrorMessages.notFoundSomeMangaTag());
             }
         }
     }
