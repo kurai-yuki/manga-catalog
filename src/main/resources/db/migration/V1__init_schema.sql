@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS manga_staff;
 
 DROP TABLE IF EXISTS cover;
 
+DROP TABLE IF EXISTS volume;
+
 DROP TABLE IF EXISTS manga;
 
 DROP TABLE IF EXISTS tag;
@@ -20,11 +22,13 @@ CREATE TYPE manga_launch_status AS ENUM ('ONGOING', 'COMPLETED', 'HIATUS', 'CANC
 
 CREATE TYPE staff_role AS ENUM ('AUTHOR', 'ARTIST');
 
+CREATE TYPE manga_language AS ENUM ('PORTUGUESE', 'ENGLISH', 'JAPANESE');
+
 -- TABLES --
 CREATE TABLE manga (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    title VARCHAR(255) NOT NULL UNIQUE,
-    description VARCHAR(255),
+    title TEXT NOT NULL UNIQUE,
+    description TEXT,
     status manga_status NOT NULL,
     launch_status manga_launch_status NOT NULL,
     imported BOOLEAN NOT NULL,
@@ -35,11 +39,19 @@ CREATE TABLE manga (
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
-CREATE TABLE cover (
+CREATE TABLE volume (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     manga_id BIGINT NOT NULL,
-    volume_number INTEGER NOT NULL,
-    url VARCHAR(255) NOT NULL,
+    volume_number BIGINT NOT NULL,
+    language manga_language NOT NULL DEFAULT 'PORTUGUESE',
+    created_at TIMESTAMP NOT NULL DEFAULT now(),
+    updated_at TIMESTAMP NOT NULL DEFAULT now()
+);
+
+CREATE TABLE cover (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    volume_id BIGINT NOT NULL,
+    url TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -55,8 +67,8 @@ CREATE TABLE manga_staff (
 
 CREATE TABLE staff (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    description VARCHAR(255),
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -71,17 +83,17 @@ CREATE TABLE manga_tag (
 
 CREATE TABLE tag (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    description VARCHAR(255) NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE publisher (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    description VARCHAR(255),
-    image_url VARCHAR(255),
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    image_url TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -90,8 +102,11 @@ CREATE TABLE publisher (
 ALTER TABLE manga
 ADD CONSTRAINT fk_manga_publisher FOREIGN KEY (publisher_id) REFERENCES publisher (id) ON DELETE CASCADE;
 
+ALTER TABLE volume
+ADD CONSTRAINT fk_volume_manga FOREIGN KEY (manga_id) REFERENCES manga (id) ON DELETE CASCADE;
+
 ALTER TABLE cover
-ADD CONSTRAINT fk_cover_manga FOREIGN KEY (manga_id) REFERENCES manga (id) ON DELETE CASCADE;
+ADD CONSTRAINT fk_cover_volume FOREIGN KEY (volume_id) REFERENCES volume (id) ON DELETE CASCADE;
 
 ALTER TABLE manga_staff
 ADD CONSTRAINT fk_manga_staff_manga FOREIGN KEY (manga_id) REFERENCES manga (id) ON DELETE CASCADE;
@@ -106,8 +121,11 @@ ALTER TABLE manga_tag
 ADD CONSTRAINT fk_manga_tag_tag FOREIGN KEY (tag_id) REFERENCES tag (id) ON DELETE CASCADE;
 
 -- UNIQUE CONSTRAINT --
+ALTER TABLE volume
+ADD CONSTRAINT uq_volume_manga UNIQUE (manga_id, volume_number);
+
 ALTER TABLE cover
-ADD CONSTRAINT uq_cover_manga UNIQUE (manga_id, volume_number);
+ADD CONSTRAINT uq_cover_volume UNIQUE (volume_id);
 
 ALTER TABLE manga_staff
 ADD CONSTRAINT uq_manga_staff UNIQUE (manga_id, staff_id, role);
@@ -118,7 +136,9 @@ ADD CONSTRAINT uq_manga_tag UNIQUE (manga_id, tag_id);
 -- INDEXES --
 CREATE INDEX idx_manga_publisher ON manga (publisher_id);
 
-CREATE INDEX idx_cover_manga ON cover (manga_id);
+CREATE INDEX idx_volume_manga ON volume (manga_id);
+
+CREATE INDEX idx_cover_volume ON cover (volume_id);
 
 CREATE INDEX idx_manga_staff_manga ON manga_staff (manga_id);
 
