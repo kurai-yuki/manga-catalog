@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import com.manga.catalog.manga_catalog.dtos.cover.CoverDto;
 import com.manga.catalog.manga_catalog.dtos.publisher.PublisherDto;
 import com.manga.catalog.manga_catalog.shared.enums.LaunchStatusEnum;
 import com.manga.catalog.manga_catalog.shared.enums.StatusEnum;
@@ -34,6 +35,8 @@ public class MangaDto {
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private LaunchStatusEnum launchStatus;
+
+    private CoverDto cover;
 
     private boolean imported;
 

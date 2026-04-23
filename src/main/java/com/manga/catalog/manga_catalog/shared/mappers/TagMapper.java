@@ -12,9 +12,9 @@ import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 
 @Mapper(componentModel = "spring")
 public interface TagMapper {
-    TagDto toDto(Tag manga);
+    TagDto toDto(Tag tag);
 
-    List<TagDto> toDto(List<Tag> mangas);
+    List<TagDto> toDto(List<Tag> tags);
 
     Tag toEntity(TagDto dto);
 
@@ -37,8 +37,8 @@ public interface TagMapper {
      * Tag - Entity that will be update <br>
      * Dto - Will update some datas from the entity
      **/
-    default void update(Tag manga, CreateTagDto dto) {
-        manga.setName(dto.getName() != null ? dto.getName() : manga.getName());
-        manga.setDescription(dto.getDescription() != null ? dto.getDescription() : manga.getDescription());
+    default void update(Tag tag, CreateTagDto dto) {
+        tag.setName(dto.getName() != null ? dto.getName() : tag.getName());
+        tag.setDescription(dto.getDescription() != null ? dto.getDescription() : tag.getDescription());
     }
 }

@@ -1,11 +1,14 @@
 package com.manga.catalog.manga_catalog.services;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.manga.catalog.manga_catalog.dtos.cover.CoverDto;
 import com.manga.catalog.manga_catalog.dtos.manga.CreateMangaDto;
 import com.manga.catalog.manga_catalog.dtos.manga.MangaCountDto;
 import com.manga.catalog.manga_catalog.dtos.manga.MangaDto;
@@ -30,6 +33,7 @@ public class MangaService {
     private final MangaRepository mangaRepository;
     private final PublisherRepository publisherRepository;
     private final MangaMapperImpl mangaMapperImpl;
+    private final CoverService coverService;
 
     public MangaCountDto mangaCount() {
         int allMangas = (int) mangaRepository.count();
@@ -45,7 +49,17 @@ public class MangaService {
 
         Page<Manga> mangas = mangaRepository.findAll(pagination);
 
-        return mangaMapperImpl.toPagination(mangas);
+        PaginationResponse<MangaDto> dto = mangaMapperImpl.toPagination(mangas);
+
+        for (MangaDto manga : dto.getData()) {
+            List<CoverDto> covers = coverService.findCoversByMangaId(manga.getId());
+
+            if (covers.size() > 0) {
+                manga.setCover(covers.get(covers.size() - 1));
+            }
+        }
+
+        return dto;
     }
 
     public MangaDto findById(int id) {
@@ -54,7 +68,9 @@ public class MangaService {
                     throw new NotFoundException(ErrorMessages.notFoundManga(id));
                 });
 
-        MangaDto mangaDto = mangaMapperImpl.toDto(manga);
+        CoverDto cover = coverService.findCoverByVolumeId(id);
+
+        MangaDto mangaDto = mangaMapperImpl.toDto(manga, cover);
         return mangaDto;
     }
 

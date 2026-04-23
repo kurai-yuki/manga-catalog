@@ -12,9 +12,9 @@ import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 
 @Mapper(componentModel = "spring")
 public interface PublisherMapper {
-    PublisherDto toDto(Publisher manga);
+    PublisherDto toDto(Publisher publisher);
 
-    List<PublisherDto> toDtoList(List<Publisher> mangas);
+    List<PublisherDto> toDtoList(List<Publisher> publishers);
 
     Publisher toEntity(PublisherDto dto);
 
@@ -34,9 +34,9 @@ public interface PublisherMapper {
      * Publisher - Entity that will be update <br>
      * Dto - Will update some datas from the entity
      **/
-    default void update(Publisher manga, CreatePublisherDto dto) {
-        manga.setName(dto.getName() != null ? dto.getName() : manga.getName());
-        manga.setDescription(dto.getDescription() != null ? dto.getDescription() : manga.getDescription());
-        manga.setImageUrl(dto.getImageUrl() != null ? dto.getImageUrl() : manga.getImageUrl());
+    default void update(Publisher publisher, CreatePublisherDto dto) {
+        publisher.setName(dto.getName() != null ? dto.getName() : publisher.getName());
+        publisher.setDescription(dto.getDescription() != null ? dto.getDescription() : publisher.getDescription());
+        publisher.setImageUrl(dto.getImageUrl() != null ? dto.getImageUrl() : publisher.getImageUrl());
     }
 }

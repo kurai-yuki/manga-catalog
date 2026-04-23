@@ -64,4 +64,16 @@ public class ErrorMessages {
     public static String mangaTagAlredyExists() {
         return "Tag alredy exists on this manga!";
     }
+
+    public static String notFoundVolume(int id) {
+        return "Volume with id " + id + " not founded!";
+    }
+
+    public static String VolumeAlredyExists() {
+        return "Volume alredy exists on this manga!";
+    }
+
+    public static String VolumeAlredyInUse() {
+        return "Volume alredy exists on this manga with this number!";
+    }
 }

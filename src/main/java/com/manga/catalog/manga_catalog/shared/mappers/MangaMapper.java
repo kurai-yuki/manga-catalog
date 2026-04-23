@@ -3,8 +3,10 @@ package com.manga.catalog.manga_catalog.shared.mappers;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 
+import com.manga.catalog.manga_catalog.dtos.cover.CoverDto;
 import com.manga.catalog.manga_catalog.dtos.manga.CreateMangaDto;
 import com.manga.catalog.manga_catalog.dtos.manga.MangaDto;
 import com.manga.catalog.manga_catalog.entities.Manga;
@@ -13,6 +15,9 @@ import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 @Mapper(componentModel = "spring")
 public interface MangaMapper {
     MangaDto toDto(Manga manga);
+
+    @Mapping(source = "manga.id", target = "id")
+    MangaDto toDto(Manga manga, CoverDto cover);
 
     List<MangaDto> toDtoList(List<Manga> mangas);
 
