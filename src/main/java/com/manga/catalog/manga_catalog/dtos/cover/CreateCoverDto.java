@@ -8,9 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CreateCoverDto {
-    private Integer mangaId;
+    private Integer volumeId;
 
     private String url;
-
-    private Integer volumeNumber;
 }
