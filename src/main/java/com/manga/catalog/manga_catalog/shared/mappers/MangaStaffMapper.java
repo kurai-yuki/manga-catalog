@@ -10,9 +10,9 @@ import com.manga.catalog.manga_catalog.entities.MangaStaff;
 
 @Mapper(componentModel = "spring")
 public interface MangaStaffMapper {
-    MangaStaffDto toDto(MangaStaff manga);
+    MangaStaffDto toDto(MangaStaff mangaStaff);
 
-    List<MangaStaffDto> toDto(List<MangaStaff> manga);
+    List<MangaStaffDto> toDto(List<MangaStaff> mangaStaff);
 
     MangaStaff toEntity(MangaStaffDto dto);
 

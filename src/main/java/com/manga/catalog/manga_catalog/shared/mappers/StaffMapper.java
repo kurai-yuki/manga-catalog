@@ -10,11 +10,12 @@ import com.manga.catalog.manga_catalog.dtos.staff.StaffDto;
 import com.manga.catalog.manga_catalog.entities.Staff;
 import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 
+
 @Mapper(componentModel = "spring")
 public interface StaffMapper {
-    StaffDto toDto(Staff manga);
+    StaffDto toDto(Staff staff);
 
-    List<StaffDto> toDtoList(List<Staff> mangas);
+    List<StaffDto> toDtoList(List<Staff> staff);
 
     Staff toEntity(StaffDto dto);
 
@@ -37,8 +38,8 @@ public interface StaffMapper {
      * Staff - Entity that will be update <br>
      * Dto - Will update some datas from the entity
      **/
-    default void update(Staff manga, CreateStaffDto dto) {
-        manga.setName(dto.getName() != null ? dto.getName() : manga.getName());
-        manga.setDescription(dto.getDescription() != null ? dto.getDescription() : manga.getDescription());
+    default void update(Staff staff, CreateStaffDto dto) {
+        staff.setName(dto.getName() != null ? dto.getName() : staff.getName());
+        staff.setDescription(dto.getDescription() != null ? dto.getDescription() : staff.getDescription());
     }
 }

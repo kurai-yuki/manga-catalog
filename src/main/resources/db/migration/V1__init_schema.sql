@@ -15,6 +15,15 @@ DROP TABLE IF EXISTS staff;
 
 DROP TABLE IF EXISTS publisher;
 
+-- DROP TYPE
+DROP TYPE IF EXISTS manga_status;
+
+DROP TYPE IF EXISTS manga_launch_status;
+
+DROP TYPE IF EXISTS staff_role;
+
+DROP TYPE IF EXISTS manga_language;
+
 -- ENUMS
 CREATE TYPE manga_status AS ENUM ('ONGOING', 'WAITING_FOR_NEW', 'COMPLETE');
 

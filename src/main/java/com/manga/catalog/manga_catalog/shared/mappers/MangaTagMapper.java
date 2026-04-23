@@ -10,7 +10,7 @@ import com.manga.catalog.manga_catalog.entities.MangaTag;
 
 @Mapper(componentModel = "spring")
 public interface MangaTagMapper {
-    MangaTagDto toDto(MangaTag manga);
+    MangaTagDto toDto(MangaTag mangaTag);
 
     List<MangaTagDto> toDto(List<MangaTag> mangaTags);
 
