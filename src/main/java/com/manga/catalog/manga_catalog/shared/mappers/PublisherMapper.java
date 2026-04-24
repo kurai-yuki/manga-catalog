@@ -14,7 +14,7 @@ import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 public interface PublisherMapper {
     PublisherDto toDto(Publisher publisher);
 
-    List<PublisherDto> toDtoList(List<Publisher> publishers);
+    List<PublisherDto> toDto(List<Publisher> publishers);
 
     Publisher toEntity(PublisherDto dto);
 
@@ -22,7 +22,7 @@ public interface PublisherMapper {
 
     default PaginationResponse<PublisherDto> toPagination(Page<Publisher> page) {
         PaginationResponse<PublisherDto> response = new PaginationResponse<>();
-        List<PublisherDto> dto = toDtoList(page.getContent());
+        List<PublisherDto> dto = toDto(page.getContent());
 
         response.setData(dto);
         response.setPagination(page.getPageable());

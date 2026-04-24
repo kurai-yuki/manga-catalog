@@ -16,14 +16,14 @@ public interface VolumeMapper {
     @Mapping(source = "volume.id", target = "id")
     VolumeDto toDto(Volume volume, CoverDto cover);
 
+    List<VolumeDto> toDto(List<Volume> volumes);
+
     Volume toEntity(VolumeDto dto);
 
     Volume toEntity(CreateVolumeDto dto);
 
-    List<VolumeDto> toDtoList(List<Volume> volumes);
-
-    default List<VolumeDto> toDtoList(List<Volume> volumes, List<CoverDto> covers) {
-        List<VolumeDto> dtoList = toDtoList(volumes);
+    default List<VolumeDto> toDto(List<Volume> volumes, List<CoverDto> covers) {
+        List<VolumeDto> dtoList = toDto(volumes);
 
         for (VolumeDto volume : dtoList) {
             CoverDto cover = covers.stream().filter((c) -> c.getVolumeNumber().equals(volume.getVolumeNumber()))
