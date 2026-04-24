@@ -37,7 +37,7 @@ public class MangaController {
     @GetMapping("/{id}")
     public ResponseEntity<MangaDto> findById(@PathVariable int id) {
         MangaDto manga = service.findById(id);
-        return new ResponseEntity<MangaDto>(manga, HttpStatus.CREATED);
+        return new ResponseEntity<MangaDto>(manga, HttpStatus.OK);
     }
 
     @GetMapping("/count")
@@ -63,6 +63,6 @@ public class MangaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove(@PathVariable int id) {
         service.remove(id);
-        return ResponseEntity.noContent().build(); 
+        return ResponseEntity.noContent().build();
     }
 }

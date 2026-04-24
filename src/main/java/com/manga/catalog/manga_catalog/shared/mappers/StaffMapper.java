@@ -10,12 +10,11 @@ import com.manga.catalog.manga_catalog.dtos.staff.StaffDto;
 import com.manga.catalog.manga_catalog.entities.Staff;
 import com.manga.catalog.manga_catalog.shared.dtos.PaginationResponse;
 
-
 @Mapper(componentModel = "spring")
 public interface StaffMapper {
     StaffDto toDto(Staff staff);
 
-    List<StaffDto> toDtoList(List<Staff> staff);
+    List<StaffDto> toDto(List<Staff> staff);
 
     Staff toEntity(StaffDto dto);
 
@@ -26,7 +25,7 @@ public interface StaffMapper {
      **/
     default PaginationResponse<StaffDto> toPagination(Page<Staff> page) {
         PaginationResponse<StaffDto> response = new PaginationResponse<>();
-        List<StaffDto> dto = toDtoList(page.getContent());
+        List<StaffDto> dto = toDto(page.getContent());
 
         response.setData(dto);
         response.setPagination(page.getPageable());

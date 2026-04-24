@@ -2,6 +2,7 @@ package com.manga.catalog.manga_catalog.dtos.mangaStaff;
 
 import com.manga.catalog.manga_catalog.shared.enums.RoleEnum;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateMangaStaffDto {
+    @NotNull
     private RoleEnum role;
 }

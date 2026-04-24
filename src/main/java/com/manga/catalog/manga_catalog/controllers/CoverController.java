@@ -25,18 +25,18 @@ public class CoverController {
     @GetMapping("/{id}")
     public ResponseEntity<CoverDto> findById(@PathVariable int id) {
         CoverDto cover = service.findById(id);
-        return new ResponseEntity<CoverDto>(cover, HttpStatus.CREATED);
+        return new ResponseEntity<CoverDto>(cover, HttpStatus.OK);
     }
 
     @GetMapping("/volume/{volumeId}")
     public ResponseEntity<CoverDto> findCoverByVolumeId(@PathVariable int volumeId) {
         CoverDto covers = service.findCoverByVolumeId(volumeId);
-        return new ResponseEntity<CoverDto>(covers, HttpStatus.CREATED);
+        return new ResponseEntity<CoverDto>(covers, HttpStatus.OK);
     }
 
     @GetMapping("/manga/{mangaId}")
     public ResponseEntity<List<CoverDto>> findCoversByMangaId(@PathVariable int mangaId) {
         List<CoverDto> covers = service.findCoversByMangaId(mangaId);
-        return new ResponseEntity<List<CoverDto>>(covers, HttpStatus.CREATED);
+        return new ResponseEntity<List<CoverDto>>(covers, HttpStatus.OK);
     }
 }

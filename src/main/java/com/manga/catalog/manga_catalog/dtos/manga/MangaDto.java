@@ -23,9 +23,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MangaDto {
     private Integer id;
-
+    
     private String title;
-
+    
     private String description;
 
     @Enumerated(EnumType.STRING)

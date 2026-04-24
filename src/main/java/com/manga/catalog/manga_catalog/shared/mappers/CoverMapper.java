@@ -15,11 +15,11 @@ public interface CoverMapper {
     @Mapping(source = "cover.volume.volumeNumber", target = "volumeNumber")
     CoverDto toDto(Cover cover);
 
+    List<CoverDto> toDto(List<Cover> covers);
+
     Cover toEntity(CoverDto dto);
 
     Cover toEntity(CreateCoverDto dto);
-
-    List<CoverDto> toDtoList(List<Cover> covers);
 
     /**
      * Cover - Entity that will be update <br>

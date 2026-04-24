@@ -38,13 +38,13 @@ public class TagController {
     @GetMapping("/{id}")
     public ResponseEntity<TagDto> findById(@PathVariable int id) {
         TagDto tag = tagService.findById(id);
-        return new ResponseEntity<TagDto>(tag, HttpStatus.CREATED);
+        return new ResponseEntity<TagDto>(tag, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<TagDto> add(@RequestBody CreateTagDto body) {
         TagDto tag = tagService.add(body);
-        return new ResponseEntity<TagDto>(tag, HttpStatus.OK);
+        return new ResponseEntity<TagDto>(tag, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

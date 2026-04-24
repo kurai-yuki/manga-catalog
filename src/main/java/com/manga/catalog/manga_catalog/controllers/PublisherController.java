@@ -36,13 +36,13 @@ public class PublisherController {
     @GetMapping("/{id}")
     public ResponseEntity<PublisherDto> findById(@PathVariable int id) {
         PublisherDto publisher = service.findById(id);
-        return new ResponseEntity<PublisherDto>(publisher, HttpStatus.CREATED);
+        return new ResponseEntity<PublisherDto>(publisher, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<PublisherDto> add(@RequestBody CreatePublisherDto body) {
         PublisherDto publisher = service.add(body);
-        return new ResponseEntity<PublisherDto>(publisher, HttpStatus.OK);
+        return new ResponseEntity<PublisherDto>(publisher, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
