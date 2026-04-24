@@ -32,7 +32,7 @@ public class VolumeService {
     public List<VolumeDto> findByMangaId(int mangaId) {
         List<Volume> volumes = repository.findByMangaId(mangaId);
 
-        List<VolumeDto> dto = volumeMapperImpl.toDtoList(volumes);
+        List<VolumeDto> dto = volumeMapperImpl.toDto(volumes);
         for (VolumeDto volume : dto) {
             CoverDto cover = coverService.findCoverByVolumeId(volume.getId());
             volume.setCover(cover);

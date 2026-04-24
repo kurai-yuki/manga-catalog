@@ -13,6 +13,6 @@ public class CoverDto {
     private Integer id;
 
     private String url;
-    
+
     private Integer volumeNumber;
 }

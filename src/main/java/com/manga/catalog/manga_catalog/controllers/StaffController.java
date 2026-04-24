@@ -76,13 +76,13 @@ public class StaffController {
     @GetMapping("/manga-staff/{id}")
     public ResponseEntity<MangaStaffDto> findMangaStaffById(@PathVariable int id) {
         MangaStaffDto covers = mangaStaffService.findMangaStaffById(id);
-        return new ResponseEntity<MangaStaffDto>(covers, HttpStatus.CREATED);
+        return new ResponseEntity<MangaStaffDto>(covers, HttpStatus.OK);
     }
 
     @PostMapping("/manga")
     public ResponseEntity<MangaStaffDto> addStaffOnManga(@RequestBody CreateMangaStaffDto body) {
         MangaStaffDto mangaStaff = mangaStaffService.addStaffOnManga(body);
-        return new ResponseEntity<MangaStaffDto>(mangaStaff, HttpStatus.OK);
+        return new ResponseEntity<MangaStaffDto>(mangaStaff, HttpStatus.CREATED);
     }
 
     @PatchMapping("/manga/{id}")

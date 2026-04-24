@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class CoverService {
 
     private final CoverMapperImpl coverMapperImpl;
-    private final CoverRepository repository;
+    private final CoverRepository coverRepository;
     private final VolumeRepository volumeRepository;
 
     public CoverDto findCoverByVolumeId(int volumeId) {
@@ -31,17 +31,17 @@ public class CoverService {
             throw new NotFoundException(ErrorMessages.notFoundVolume(volumeId));
         }
 
-        Cover cover = repository.findByVolumeId(volumeId);
+        Cover cover = coverRepository.findByVolumeId(volumeId);
         return coverMapperImpl.toDto(cover);
     }
 
     public List<CoverDto> findCoversByMangaId(int mangaId) {
-        List<Cover> covers = repository.findByMangaId(mangaId);
-        return coverMapperImpl.toDtoList(covers);
+        List<Cover> covers = coverRepository.findByMangaId(mangaId);
+        return coverMapperImpl.toDto(covers);
     }
 
     public CoverDto findById(int id) {
-        Cover cover = repository.findById(id)
+        Cover cover = coverRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new NotFoundException(ErrorMessages.notFoundCover(id));
                 });
@@ -50,7 +50,7 @@ public class CoverService {
     }
 
     public CoverDto add(CreateCoverDto payload) {
-        boolean exists = repository.existsByVolumeId(
+        boolean exists = coverRepository.existsByVolumeId(
                 payload.getVolumeId());
 
         if (exists) {
@@ -59,41 +59,41 @@ public class CoverService {
 
         Volume volume = volumeRepository.findById(payload.getVolumeId())
                 .orElseThrow(() -> {
-                    throw new NotFoundException(ErrorMessages.notFoundCover(payload.getVolumeId()));
+                    throw new NotFoundException(ErrorMessages.notFoundVolume(payload.getVolumeId()));
                 });
 
         Cover cover = coverMapperImpl.toEntity(payload);
         cover.setVolume(volume);
 
-        Cover response = repository.save(cover);
+        Cover response = coverRepository.save(cover);
 
         return coverMapperImpl.toDto(response);
     }
 
     public CoverDto update(int id, CreateCoverDto payload) {
-        Cover cover = repository.findById(id)
+        Cover cover = coverRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new NotFoundException(ErrorMessages.notFoundCover(id));
                 });
 
         Volume volume = volumeRepository.findById(payload.getVolumeId()).orElseThrow(() -> {
-            throw new NotFoundException(ErrorMessages.notFoundCover(id));
+            throw new NotFoundException(ErrorMessages.notFoundVolume(id));
         });
 
         coverMapperImpl.update(cover, payload, volume);
 
-        Cover response = repository.save(cover);
+        Cover response = coverRepository.save(cover);
 
         return coverMapperImpl.toDto(response);
     }
 
     public void remove(int id) {
-        boolean exists = repository.existsById(id);
+        boolean exists = coverRepository.existsById(id);
 
         if (!exists) {
             throw new NotFoundException(ErrorMessages.notFoundCover(id));
         }
 
-        repository.deleteById(id);
+        coverRepository.deleteById(id);
     }
 }

@@ -30,25 +30,25 @@ public class VolumeController {
     @GetMapping("/manga/{mangaId}")
     public ResponseEntity<List<VolumeDto>> findByMangaId(@PathVariable int mangaId) {
         List<VolumeDto> volumes = service.findByMangaId(mangaId);
-        return new ResponseEntity<List<VolumeDto>>(volumes, HttpStatus.CREATED);
+        return new ResponseEntity<List<VolumeDto>>(volumes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VolumeDto> findById(@PathVariable int id) {
         VolumeDto volume = service.findById(id);
-        return new ResponseEntity<VolumeDto>(volume, HttpStatus.CREATED);
+        return new ResponseEntity<VolumeDto>(volume, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<VolumeDto> add(@RequestBody CreateVolumeDto body) {
         VolumeDto volume = service.add(body);
-        return new ResponseEntity<VolumeDto>(volume, HttpStatus.OK);
+        return new ResponseEntity<VolumeDto>(volume, HttpStatus.CREATED);
     }
 
     @PostMapping("/many")
     public ResponseEntity<List<VolumeDto>> addMany(@RequestBody List<CreateVolumeDto> body) {
         List<VolumeDto> volume = service.addMany(body);
-        return new ResponseEntity<List<VolumeDto>>(volume, HttpStatus.OK);
+        return new ResponseEntity<List<VolumeDto>>(volume, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

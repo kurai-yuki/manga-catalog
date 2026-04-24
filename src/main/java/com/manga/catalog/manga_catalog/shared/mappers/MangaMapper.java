@@ -19,7 +19,7 @@ public interface MangaMapper {
     @Mapping(source = "manga.id", target = "id")
     MangaDto toDto(Manga manga, CoverDto cover);
 
-    List<MangaDto> toDtoList(List<Manga> mangas);
+    List<MangaDto> toDto(List<Manga> mangas);
 
     Manga toEntity(MangaDto dto);
 
@@ -30,7 +30,7 @@ public interface MangaMapper {
      **/
     default PaginationResponse<MangaDto> toPagination(Page<Manga> page) {
         PaginationResponse<MangaDto> response = new PaginationResponse<>();
-        List<MangaDto> dto = toDtoList(page.getContent());
+        List<MangaDto> dto = toDto(page.getContent());
 
         response.setData(dto);
         response.setPagination(page.getPageable());

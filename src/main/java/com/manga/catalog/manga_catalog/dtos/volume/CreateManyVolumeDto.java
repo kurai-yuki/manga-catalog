@@ -2,6 +2,7 @@ package com.manga.catalog.manga_catalog.dtos.volume;
 
 import com.manga.catalog.manga_catalog.shared.enums.MangaLanguageEnum;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +11,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CreateManyVolumeDto {
+    @NotNull
     private Integer mangaId;
 
+    @NotNull
     private MangaLanguageEnum language;
 
+    @NotNull
     private Integer volumeNumber;
 }
